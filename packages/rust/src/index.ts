@@ -132,15 +132,15 @@ async function buildHandler(options: BuildOptions): Promise<BuildResultV3> {
   const handler = getExecutableName('executable');
   const executableFile = new FileFsRef({ mode: 0o755, fsPath: bin });
   const lambda = new Lambda({
+    ...lambdaOptions,
     files: {
       ...extraFiles,
       [handler]: executableFile,
     },
     handler,
+    supportsResponseStreaming: true,
     architecture,
     runtime: 'executable',
-    supportsResponseStreaming: true,
-    ...lambdaOptions,
   });
   lambda.zipBuffer = await lambda.createZip();
 
